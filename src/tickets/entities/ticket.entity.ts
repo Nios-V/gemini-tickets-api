@@ -43,6 +43,9 @@ export class Ticket {
     @Column({ type: 'float', nullable: true })
     aiConfidence?: number;
 
+    @Column({ type: 'text', nullable: true })
+    aiSummary?: string;
+
     @ManyToOne(() => User, (user) => user.tickets, { eager: true })
     createdBy: User;
 

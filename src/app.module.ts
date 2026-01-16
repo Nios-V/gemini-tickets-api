@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { TicketsModule } from './tickets/tickets.module';
+import { AiModule } from './ai/ai.module';
 
 
 @Module({
@@ -28,6 +29,7 @@ import { TicketsModule } from './tickets/tickets.module';
       }),
     UsersModule,
     TicketsModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

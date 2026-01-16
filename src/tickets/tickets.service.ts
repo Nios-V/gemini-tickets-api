@@ -6,13 +6,15 @@ import { Ticket, TicketPriority, TicketStatus } from './entities/ticket.entity';
 import { Repository, DataSource } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { User, UserRole } from 'src/users/entities/user.entity';
+import { AiService } from 'src/ai/ai.service';
 
 @Injectable()
 export class TicketsService {
   constructor(
     @InjectRepository(Ticket)
     private readonly ticketsRepository: Repository<Ticket>,
-    private readonly usersService: UsersService, 
+    private readonly usersService: UsersService,
+    private readonly aiService: AiService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -41,7 +43,9 @@ export class TicketsService {
         createdBy: user,
       });
 
-      return ticketRepo.save(ticket);
+      const ticketCreated = await ticketRepo.save(ticket);
+      await this.analyzeTicketWithAI(ticketCreated);
+      return ticketCreated;
     });
   }
 
@@ -79,7 +83,26 @@ export class TicketsService {
     return this.ticketsRepository.save(ticket);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} ticket`;
+  private async analyzeTicketWithAI(ticket: Ticket) {
+    try {
+      const analysis = await this.aiService.analyzeTicket({
+        title: ticket.title,
+        description: ticket.description,
+      });
+
+      ticket.category = analysis.category;
+      ticket.priority = analysis.priority;
+      ticket.aiSummary = analysis.summary;
+      ticket.aiConfidence = analysis.confidence;
+
+      return this.ticketsRepository.update(ticket.id, {
+        category: ticket.category,
+        priority: ticket.priority,
+        aiSummary: ticket.aiSummary,
+        aiConfidence: ticket.aiConfidence,
+      });
+    } catch (error) {
+      console.error('AI analysis failed:', error);
+    }
   }
 }
