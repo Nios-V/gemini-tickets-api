@@ -1,5 +1,5 @@
 import { User } from "src/users/entities/user.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export enum TicketStatus {
     OPEN = "OPEN",
@@ -13,6 +13,7 @@ export enum TicketPriority {
     HIGH = "HIGH"
 }
 
+@Entity('tickets')
 export class Ticket {
     @PrimaryGeneratedColumn("uuid")
     id: string;
