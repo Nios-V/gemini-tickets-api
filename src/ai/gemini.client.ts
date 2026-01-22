@@ -13,6 +13,6 @@ export class GeminiClient {
 
     async generate(prompt: string): Promise<string> {
         const result = await this.model.generateContent(prompt);
-        return result.response.text;
+        return result.response.text();
     }
 }

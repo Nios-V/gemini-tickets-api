@@ -30,7 +30,33 @@ export class AiService {
         `;
 
         const response = await this.geminiClient.generate(prompt);
-
-        return JSON.parse(response);
+        
+        const cleanedResponse = this.cleanJson(response);
+    
+    try {
+        return JSON.parse(cleanedResponse);
+    } catch (error) {
+        console.error('Failed to parse:', cleanedResponse);
+        return {
+            category: 'OTHER',
+            priority: 'MEDIUM',
+            summary: 'Unable to analyze ticket automatically',
+            confidence: 0
+        };
     }
+    }
+
+    private cleanJson(response: string): string {
+    let cleaned = response
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim();
+    
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+        cleaned = jsonMatch[0];
+    }
+    
+    return cleaned;
+}
 }

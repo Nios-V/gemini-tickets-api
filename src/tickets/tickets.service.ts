@@ -90,10 +90,14 @@ export class TicketsService {
         description: ticket.description,
       });
 
-      ticket.category = analysis.category;
-      ticket.priority = analysis.priority;
-      ticket.aiSummary = analysis.summary;
-      ticket.aiConfidence = analysis.confidence;
+      if (!analysis.confidence || analysis.confidence < 0.7) {
+        console.log('AI confidence too low, skipping update');
+        return;
+      }
+      if (analysis.category !== 'UNKNOWN') ticket.category = analysis.category;
+      if (analysis.priority !== 'UNKNOWN') ticket.priority = analysis.priority;
+      if (analysis.summary !== 'UNKNOWN') ticket.aiSummary = analysis.summary;
+      if (analysis.confidence !== 'UNKNOWN') ticket.aiConfidence = analysis.confidence;
 
       return this.ticketsRepository.update(ticket.id, {
         category: ticket.category,
