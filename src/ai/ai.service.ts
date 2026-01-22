@@ -27,6 +27,9 @@ export class AiService {
         - priority (LOW | MEDIUM | HIGH)
         - summary (max 2 lines)
         - confidence: a number between 0 and 1 indicating how confident you are in the classification
+        - reason: brief explanation of the classification
+        - emotionalTone: brief description of the emotional tone of the user ('ANGRY' | 'NEUTRAL' | 'FRUSTRATED' | 'GRATEFUL' | 'SAD' | 'HAPPY')
+        - suggestedReply: a short, empathetic reply to the user
         `;
 
         const response = await this.geminiClient.generate(prompt);
@@ -41,7 +44,10 @@ export class AiService {
             category: 'OTHER',
             priority: 'MEDIUM',
             summary: 'Unable to analyze ticket automatically',
-            confidence: 0
+            confidence: 0,
+            reason: 'AI response parsing failed',
+            emotionalTone: 'NEUTRAL',
+            suggestedReply: 'Thank you for reaching out. We will look into your issue and get back to you shortly.'
         };
     }
     }

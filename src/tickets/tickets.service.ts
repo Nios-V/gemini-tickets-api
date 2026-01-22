@@ -101,12 +101,18 @@ export class TicketsService {
       if (analysis.priority !== 'UNKNOWN') ticket.priority = analysis.priority;
       if (analysis.summary !== 'UNKNOWN') ticket.aiSummary = analysis.summary;
       if (analysis.confidence !== 'UNKNOWN') ticket.aiConfidence = analysis.confidence;
+      if (analysis.reason !== 'UNKNOWN') ticket.reason = analysis.reason;
+      if (analysis.emotionalTone !== 'UNKNOWN') ticket.emotionalTone = analysis.emotionalTone;
+      if (analysis.suggestedReply !== 'UNKNOWN') ticket.suggestedReply = analysis.suggestedReply;
 
       return this.ticketsRepository.update(ticket.id, {
         category: ticket.category,
         priority: ticket.priority,
         aiSummary: ticket.aiSummary,
         aiConfidence: ticket.aiConfidence,
+        reason: ticket.reason,
+        emotionalTone: ticket.emotionalTone,
+        suggestedReply: ticket.suggestedReply,
       });
     } catch (error) {
       console.error('AI analysis failed:', error);

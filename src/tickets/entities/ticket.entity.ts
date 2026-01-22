@@ -21,7 +21,7 @@ export class Ticket {
     @Column()
     title: string;
 
-    @Column()
+    @Column({ type: 'varchar', length: 500, nullable: true })
     description: string;
 
     @Column({
@@ -44,8 +44,17 @@ export class Ticket {
     @Column({ type: 'float', nullable: true })
     aiConfidence?: number;
 
-    @Column({ type: 'text', nullable: true })
+    @Column({ type: 'varchar', length: 255, nullable: true })
     aiSummary?: string;
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    reason?: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: true })
+    emotionalTone?: string;
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    suggestedReply?: string;
 
     @ManyToOne(() => User, (user) => user.tickets, { eager: true })
     createdBy: User;
