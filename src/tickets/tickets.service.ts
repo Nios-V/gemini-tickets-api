@@ -44,7 +44,10 @@ export class TicketsService {
       });
 
       const ticketCreated = await ticketRepo.save(ticket);
-      await this.analyzeTicketWithAI(ticketCreated);
+
+      if (process.env.AI_ENABLED === 'true') {
+        await this.analyzeTicketWithAI(ticketCreated);
+      }
       return ticketCreated;
     });
   }
